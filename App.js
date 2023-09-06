@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
   SafeAreaView,
   TouchableOpacity,
@@ -7,6 +7,7 @@ import {
   View,
   FlatList,
   StyleSheet,
+  Platform,
 } from "react-native";
 import {
   MeetingProvider,
@@ -18,7 +19,9 @@ import {
 import { createMeeting, token } from "./src/api";
 import JoinScreen from "./src/screens/JoinScreen";
 import MeetingView from "./src/components/MeetingView";
-
+import SplashScreen from 'react-native-splash-screen'
+import { NavigationContainer } from '@react-navigation/native';
+import { colors } from "./src/constants/colors";
 export default function App() {
   
   const [meetingId, setMeetingId] = useState(null);
@@ -27,7 +30,16 @@ export default function App() {
     const meetingId = id == null ? await createMeeting({ token }) : id;
     setMeetingId(meetingId);
   };
-
+  useEffect(() => {
+    const ac = new AbortController();
+    setTimeout(() => {
+      SplashScreen.hide();
+      console.log('hide me');
+    }, 1000);
+    return function cleanup() {
+      ac.abort();
+    };
+  }, []);
   return meetingId ? (
     <SafeAreaView style={styles.container}>
       <MeetingProvider
@@ -49,6 +61,6 @@ export default function App() {
 
 const styles=StyleSheet.create({
   container:{
-    flex: 1, backgroundColor: "#F6F6FF"
+    flex: 1, backgroundColor: colors.white
   }
 })

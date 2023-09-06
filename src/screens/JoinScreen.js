@@ -7,10 +7,11 @@ import {
   TouchableOpacity,
   Image,
   StyleSheet,
+  ScrollView,
+  Platform
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Entypo';
 import LottieView from 'lottie-react-native';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {colors} from '../constants/colors';
 
 export default function JoinScreen(props) {
@@ -25,13 +26,14 @@ export default function JoinScreen(props) {
   };
 
   return (
-    <KeyboardAwareScrollView>
+  
       <SafeAreaView style={styles.container}>
+        <ScrollView>
         <View style={styles.textContainer}>
-          <Text style={styles.meetText}>We Meet</Text>
+          <Image source={require("../../images/meetup.png")} resizeMode='contain' style={{height:100,width:100}}/>
+          {/* <Text style={styles.meetText}>We Meet</Text> */}
         </View>
-
-        <View style={styles.toggleBtnContainer}>
+        <View style={[styles.toggleBtnContainer]}>
           <TouchableOpacity
             onPress={() => {
               // props.getMeetingId();
@@ -103,7 +105,7 @@ export default function JoinScreen(props) {
         ) : null}
 
         <TouchableOpacity
-          style={[styles.btn]}
+          style={styles.btn}
           onPress={() => {
             // props.getMeetingId(meetingVal);
             if (activeTab == 0) {
@@ -121,11 +123,16 @@ export default function JoinScreen(props) {
             {activeTab === 0 ? 'Create' : 'Join'}
           </Text>
         </TouchableOpacity>
+        </ScrollView>
       </SafeAreaView>
-    </KeyboardAwareScrollView>
+    
   );
 }
 const styles = StyleSheet.create({
+  containe:{
+    flex: 1,
+    backgroundColor: colors.white,
+  },
   container: {
     flex: 1,
     backgroundColor: colors.white,
@@ -135,7 +142,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 30,
+    marginTop: 10,
+    padding:20,
+  
   },
   meetText: {
     color: colors.black,
@@ -145,7 +154,7 @@ const styles = StyleSheet.create({
   toggleBtnContainer: {
     flexDirection: 'row',
     paddingVertical: 20,
-    marginTop: 70,
+    marginTop: 10,
   },
   tab0Actve: {
     padding: 12,
@@ -202,6 +211,7 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     fontStyle: 'italic',
     marginTop: 30,
+    color:colors.black
   },
   error: {
     color: colors.error,

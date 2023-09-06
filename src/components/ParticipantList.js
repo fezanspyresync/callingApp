@@ -36,13 +36,13 @@ export default function ParticipantList({participants, setMeetingId}) {
       {/* <Button onPress={()=>console.log('clicked')} buttonText="back" backgroundColor="black" />
        */}
       <TouchableOpacity onPress={() => setMeetingId(null)} style={styles.backButtonPosition}>
-        <Backicon name="arrow-back" size={30} color="#1178F8" />
+        <Backicon name="arrow-back" size={30} color={colors.blue} />
       </TouchableOpacity>
 
       <View style={styles.imageContainer}>
         {/* <Image source={{uri:"https://i.ytimg.com/vi/NAN4cCMGCEI/maxresdefault.jpg"}} style={styles.image}/> */}
         <LottieView
-          source={require('../qYxdNGKczi.json')}
+          source={require('../../images/animation_lm7ej5g8.json')}
           autoPlay
           loop
           style={styles.image}

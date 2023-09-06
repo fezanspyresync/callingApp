@@ -12,7 +12,7 @@ import java.util.List;
 import live.videosdk.rnincallmanager.InCallManagerPackage;
 import live.videosdk.rnwebrtc.WebRTCModulePackage;
 import live.videosdk.rnfgservice.ForegroundServicePackage;
-
+import org.devio.rn.splashscreen.SplashScreenReactPackage;
 public class MainApplication extends Application implements ReactApplication {
 
   private final ReactNativeHost mReactNativeHost =
@@ -29,10 +29,16 @@ public class MainApplication extends Application implements ReactApplication {
           // Packages that cannot be autolinked yet can be added manually here, for example:
           packages.add(new ForegroundServicePackage());
           packages.add(new InCallManagerPackage());
-           packages.add(new WebRTCModulePackage());
+          packages.add(new WebRTCModulePackage());
+            new SplashScreenReactPackage();
+         
           // packages.add(new MyReactNativePackage());
           return packages;
         }
+        // @Override    
+        //   public boolean canOverrideExistingModule(){        
+        //      return true;    
+        //     }   
 
         @Override
         protected String getJSMainModuleName() {

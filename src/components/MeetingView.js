@@ -9,12 +9,13 @@ import {
 import ControlsContainer from './ControllContainer';
 import ParticipantList from './ParticipantList';
 import {useMeeting} from '@videosdk.live/react-native-sdk';
+import { colors } from '../constants/colors';
 
 export default function MeetingView({setMeetingId}) {
   const {join, leave, toggleWebcam, toggleMic, meetingId, participants} = useMeeting({});
   const participantsArrId = [...participants.keys()];
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       {meetingId ? (
         <Text style={styles.font}>
           <Text style={styles.fontID}>Meeting Id</Text>: {meetingId}
@@ -31,13 +32,14 @@ export default function MeetingView({setMeetingId}) {
         toggleMic={toggleMic}
         participantsArrId={participantsArrId}
       />
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor:colors.white
   },
   font: {
     fontSize: 18,

@@ -14,10 +14,10 @@ import Micicon from 'react-native-vector-icons/Feather';
 import MicCrossicon from 'react-native-vector-icons/Feather';
 import Leaveicon from 'react-native-vector-icons/MaterialIcons';
 import Camera from 'react-native-vector-icons/Ionicons';
+// import Chaticon from 'react-native-vector-icons/FontAwesome5Brands';
 import {useState} from 'react';
 import {useMeeting} from '@videosdk.live/react-native-sdk';
 import { colors } from '../constants/colors';
-
 export default function ControlsContainer({
   join,
   leave,
@@ -33,9 +33,7 @@ export default function ControlsContainer({
   const onPress = async () => {
     // Change Webcam in Meeting
     const webcams = await getWebcams(); // returns all webcams
-
     const {deviceId, label} = webcams[togglecamera ? 0 : 1]; // 0th : Rear Cam, 1st : Front Cam
-
     changeWebcam(deviceId);
   };
   // justifyContent:participantsArrId.length===0? "center":'space-evenly',
@@ -99,12 +97,18 @@ export default function ControlsContainer({
             buttonText={'Leave'}
             icon={<Leaveicon name="call-end" size={30}color={colors.white} />}
           />
+           {/* <Button
+            onPress={() => {
+              leave();
+            }}
+            buttonText={'chat'}
+            icon={<Chaticon name="rocketchat" size={30}color={colors.white} />}
+          /> */}
         </>
       )}
     </View>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     padding: 24,
