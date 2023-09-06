@@ -1,10 +1,7 @@
 import {TouchableOpacity, Text, StyleSheet} from 'react-native';
 import { colors } from '../constants/colors';
 
-export const Button = ({onPress, buttonText, backgroundColor, icon}) => {
-  // width:buttonText==='JOIN'?'100%':null,
-
-  console.log(buttonText)
+export const Button = ({ onPress, buttonText, icon }) => {
 
   return (
     <TouchableOpacity

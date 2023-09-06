@@ -10,7 +10,6 @@ import {
   ScrollView,
   Platform
 } from 'react-native';
-import Icon from 'react-native-vector-icons/Entypo';
 import LottieView from 'lottie-react-native';
 import {colors} from '../constants/colors';
 
@@ -26,17 +25,14 @@ export default function JoinScreen(props) {
   };
 
   return (
-  
       <SafeAreaView style={styles.container}>
         <ScrollView>
         <View style={styles.textContainer}>
-          <Image source={require("../../images/meetup.png")} resizeMode='contain' style={{height:100,width:100}}/>
-          {/* <Text style={styles.meetText}>We Meet</Text> */}
+          <Image source={require("../assets/images/meetup.png")} resizeMode='contain' style={styles.logo} />
         </View>
         <View style={[styles.toggleBtnContainer]}>
           <TouchableOpacity
             onPress={() => {
-              // props.getMeetingId();
               setActiveTab(0);
             }}
             style={[
@@ -61,7 +57,6 @@ export default function JoinScreen(props) {
               },
             ]}
             onPress={() => {
-              // props.getMeetingId(meetingVal);
               setActiveTab(1);
             }}>
             <Text
@@ -75,21 +70,10 @@ export default function JoinScreen(props) {
         </View>
         <View style={styles.lottieContainer}>
           <LottieView
-            source={require('../animation_llxfre4g.json')}
+            source={require("../assets/images/animation_llxfre4g.json")}
             style={styles.image}
           />
         </View>
-        {/* <Text
-                style={{
-                    alignSelf: "center",
-                    fontSize: 22,
-                    marginVertical: 16,
-                    fontStyle: "italic",
-                    color: "grey",
-                }}
-            >
-                ---------- OR ----------
-            </Text> */}
 
         {activeTab == 1 ? (
           <>
@@ -100,14 +84,13 @@ export default function JoinScreen(props) {
               placeholder={'XXXX-XXXX-XXXX'}
               style={styles.input}
             />
-            {error && <Text style={styles.error}>Please enter meeting id</Text>}
+            {error && <Text style={styles.error}>Please enter the meeting id*</Text>}
           </>
         ) : null}
 
         <TouchableOpacity
           style={styles.btn}
           onPress={() => {
-            // props.getMeetingId(meetingVal);
             if (activeTab == 0) {
               props.getMeetingId();
             } else {
@@ -129,9 +112,10 @@ export default function JoinScreen(props) {
   );
 }
 const styles = StyleSheet.create({
-  containe:{
-    flex: 1,
-    backgroundColor: colors.white,
+  logo: {
+    height: 100,
+    width: 100,
+    marginTop: "10%"
   },
   container: {
     flex: 1,
@@ -216,6 +200,7 @@ const styles = StyleSheet.create({
   error: {
     color: colors.error,
     marginTop: 4,
+    fontStyle: 'italic',
   },
   btn: {
     padding: 12,

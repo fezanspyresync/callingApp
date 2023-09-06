@@ -16,12 +16,14 @@ import {
   MediaStream,
   RTCView,
 } from "@videosdk.live/react-native-sdk";
-import { createMeeting, token } from "./src/api";
+
 import JoinScreen from "./src/screens/JoinScreen";
 import MeetingView from "./src/components/MeetingView";
 import SplashScreen from 'react-native-splash-screen'
 import { NavigationContainer } from '@react-navigation/native';
 import { colors } from "./src/constants/colors";
+import { createMeeting, token } from "./src/services/api";
+
 export default function App() {
   
   const [meetingId, setMeetingId] = useState(null);
@@ -31,14 +33,10 @@ export default function App() {
     setMeetingId(meetingId);
   };
   useEffect(() => {
-    const ac = new AbortController();
     setTimeout(() => {
       SplashScreen.hide();
       console.log('hide me');
     }, 1000);
-    return function cleanup() {
-      ac.abort();
-    };
   }, []);
   return meetingId ? (
     <SafeAreaView style={styles.container}>
