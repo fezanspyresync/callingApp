@@ -10,11 +10,21 @@ import ControlsContainer from './ControllContainer';
 import ParticipantList from './ParticipantList';
 import {useMeeting} from '@videosdk.live/react-native-sdk';
 import { colors } from '../constants/colors';
+import { useState } from 'react';
+import ChatScreen from '../screens/ChatScreen';
 
 export default function MeetingView({setMeetingId}) {
   const {join, leave, toggleWebcam, toggleMic, meetingId, participants} = useMeeting({});
+  const [showChat,setShowChat]=useState(false)
+  const chatModalHandler=()=>{
+    setShowChat(true);
+  }
+  const chatModalHideHandler=()=>{
+    setShowChat(false);
+  }
+
   const participantsArrId = [...participants.keys()];
-  return (
+  return !showChat? (
     <SafeAreaView style={styles.container}>
       {meetingId ? (
         <Text style={styles.font}>
@@ -25,15 +35,17 @@ export default function MeetingView({setMeetingId}) {
         setMeetingId={setMeetingId}
         participants={participantsArrId}
       />
+     
       <ControlsContainer
         join={join}
         leave={leave}
         toggleWebcam={toggleWebcam}
         toggleMic={toggleMic}
+        chatModalHandler={chatModalHandler}
         participantsArrId={participantsArrId}
       />
     </SafeAreaView>
-  );
+  ):<ChatScreen chatModalHideHandler={chatModalHideHandler} participantsArrId={participantsArrId} />;
 }
 
 const styles = StyleSheet.create({

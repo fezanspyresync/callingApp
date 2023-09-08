@@ -14,6 +14,8 @@ import Micicon from 'react-native-vector-icons/Feather';
 import MicCrossicon from 'react-native-vector-icons/Feather';
 import Leaveicon from 'react-native-vector-icons/MaterialIcons';
 import Camera from 'react-native-vector-icons/Ionicons';
+import Message from 'react-native-vector-icons/AntDesign';
+
 // import Chaticon from 'react-native-vector-icons/FontAwesome5Brands';
 import {useState} from 'react';
 import {useMeeting} from '@videosdk.live/react-native-sdk';
@@ -24,6 +26,7 @@ export default function ControlsContainer({
   toggleWebcam,
   toggleMic,
   participantsArrId,
+  chatModalHandler
 }) {
   const [toggleWebicon, setToggleWebicon] = useState(true);
   const [toggleMicicon, setToggleMicicon] = useState(true);
@@ -91,6 +94,13 @@ export default function ControlsContainer({
             }
           />
           <Button
+            onPress={() => {
+              chatModalHandler();
+            }}
+            buttonText={'Message'}
+            icon={<Message name="wechat" size={30}color={colors.white} />}
+          />
+           <Button
             onPress={() => {
               leave();
             }}
