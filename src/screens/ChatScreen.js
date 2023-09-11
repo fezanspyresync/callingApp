@@ -132,7 +132,7 @@
 //   );
 // }
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import {
   View,
   Text,
@@ -141,7 +141,7 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
-  StyleSheet, // Import Platform to handle iOS-specific behavior
+  StyleSheet,
 } from 'react-native';
 import { usePubSub } from '@videosdk.live/react-native-sdk';
 import Cancel from 'react-native-vector-icons/Entypo';
@@ -153,41 +153,47 @@ export default function ChatScreen({ chatModalHideHandler, participantsArrId }) 
   const { publish, messages } = usePubSub('CHAT', { onOldMessagesReceived });
   const [messageInput, setMessageInput] = useState('');
   const [receivedMessages, setReceivedMessages] = useState([]);
-  const [uniqueId, setUniqueId] = useState(null);
+  const yourRef = useRef(null);
 
   function onOldMessagesReceived(messages) {
     setReceivedMessages(messages);
   }
 
   useEffect(() => {
-    pullCurrentId();
+    scrollToBottom();
   }, [messages.length]);
 
-  const pullCurrentId = () => {
-    const currentAddObject = messages[messages.length - 1];
-    setUniqueId(currentAddObject?.senderId);
+  const scrollToBottom = () => {
+    if (yourRef.current) {
+      yourRef.current.scrollToEnd({ animated: true });
+    }
   };
 
   const sendMessage = () => {
     if (messageInput) {
       const message = messageInput;
-      publish(message);
+      publish(message, { persist: true });
       setMessageInput('');
     } else {
       console.log('empty');
     }
   };
 
+  // Filter out messages with duplicate IDs
+  const filteredMessages = messages.filter((message) => {
+    return !receivedMessages.some((receivedMessage) => receivedMessage.id === message.id);
+  });
+
   const renderMessageItem = ({ item }) => {
     const isSender = item.senderId === participantsArrId[0];
     return (
       <View
-        style={[styles.message,isSender?styles.messageSend:styles.messageReceived]}
+        style={[styles.message, isSender ? styles.messageSend : styles.messageReceived]}
       >
         <View
-          style={[styles.messageContainer,isSender?styles.messageContainerSenderColor:styles.messageContainerReceiverColor]}
+          style={[styles.messageContainer, isSender ? styles.messageContainerSenderColor : styles.messageContainerReceiverColor]}
         >
-          <Text style={isSender?styles.messageContainerSenderTextColor:styles.messageContainerReceiverTextColor}>{item.message}</Text>
+          <Text style={isSender ? styles.messageContainerSenderTextColor : styles.messageContainerReceiverTextColor}>{item.message}</Text>
         </View>
       </View>
     );
@@ -196,7 +202,7 @@ export default function ChatScreen({ chatModalHideHandler, participantsArrId }) 
   return (
     <KeyboardAvoidingView
       style={styles.keyboardAvoidStyle}
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined} // Use 'padding' behavior on iOS
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
       <View >
         <Text
@@ -208,9 +214,12 @@ export default function ChatScreen({ chatModalHideHandler, participantsArrId }) 
       </View>
       <View style={styles.flatListContainerStyle}>
         <FlatList
-          data={messages.concat(receivedMessages)}
+          ref={yourRef}
+          data={receivedMessages.concat(filteredMessages)}
           renderItem={renderMessageItem}
-          keyExtractor={(item, index) => index.toString()}
+          keyExtractor={(item) => item.id.toString()}
+          onContentSizeChange={scrollToBottom} // Automatically scroll to bottom on content size change
+          // inverted={true}
         />
       </View>
 
@@ -231,61 +240,59 @@ export default function ChatScreen({ chatModalHideHandler, participantsArrId }) 
   );
 }
 
-
-const styles=StyleSheet.create({
-  message:{
+const styles = StyleSheet.create({
+  message: {
     paddingHorizontal: 10,
   },
-  messageSend:{
-    alignItems:'flex-end'
+  messageSend: {
+    alignItems: 'flex-end',
   },
-  messageReceived:{
-    alignItems:'flex-start'
+  messageReceived: {
+    alignItems: 'flex-start',
   },
-  messageContainer:{
+  messageContainer: {
     maxWidth: '60%',
-            
-            marginBottom: 10,
-            padding: 10,
-            borderRadius: 5,
-            shadowColor: "#000",
-            shadowOffset: {
-              width: 0,
-              height: 2,
-            },
-            shadowOpacity: 0.25,
-            shadowRadius: 3.84,
-            elevation: 5,
+    marginBottom: 10,
+    padding: 10,
+    borderRadius: 5,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
-  messageContainerSenderColor:{
-    backgroundColor:colors.blue
+  messageContainerSenderColor: {
+    backgroundColor: colors.blue,
   },
-  messageContainerReceiverColor:{
-    backgroundColor:colors.white
+  messageContainerReceiverColor: {
+    backgroundColor: colors.white,
   },
-  messageContainerSenderTextColor:{
-    color:  colors.white 
+  messageContainerSenderTextColor: {
+    color: colors.white,
   },
-  messageContainerReceiverTextColor:{
-    color:  colors.black
+  messageContainerReceiverTextColor: {
+    color: colors.black,
   },
-  keyboardAvoidStyle:{
-    flex: 1, backgroundColor: colors.white 
+  keyboardAvoidStyle: {
+    flex: 1, backgroundColor: colors.white,
   },
-  cancelBtnStyle:{
-    marginTop: 10, marginHorizontal: 5, textAlign: 'right'
+  cancelBtnStyle: {
+    marginTop: 10, marginHorizontal: 5, textAlign: 'right',
   },
-  flatListContainerStyle:{
-    flex: 1, justifyContent: 'flex-end', paddingVertical: 10
+  flatListContainerStyle: {
+    flex: 1, justifyContent: 'flex-end', paddingVertical: 10,
   },
-  sendMessageInputContainer:{
+  sendMessageInputContainer: {
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
     paddingBottom: 10,
   },
-  textInputStyle:{
+  textInputStyle: {
     backgroundColor: colors.white,
     width: '80%',
     borderRadius: 20,
@@ -293,5 +300,5 @@ const styles=StyleSheet.create({
     borderColor: colors.blue,
     borderWidth: 2,
     height: 50,
-  }
-})
+  },
+});
